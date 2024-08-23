@@ -1,38 +1,70 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+"use client";
+import React, { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-export default function Falshcards() {
-  const numberOfCards = 12;
-  const flashcards = Array(numberOfCards).fill().map((_, index) => ({
-    front: `Front of Card ${index + 1}`,
-    back: `Back of Card ${index + 1}`
+export default function Flashcards() {
+  const router = useRouter();
+  const [deckName, setDeckName] = useState("Your Flashcards");
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+
+  const flashcards = [...Array(20)].map((_, i) => ({
+    question: `Question ${i + 1}`,
+    answer: `Answer ${i + 1}`,
   }));
 
+  const [isFlipped, setIsFlipped] = useState(
+    Array(flashcards.length).fill(false)
+  );
+
+  useEffect(() => {
+    const storedDeckTitle = localStorage.getItem("currentDeckTitle");
+    if (storedDeckTitle) {
+      setDeckName(storedDeckTitle);
+    }
+  }, []);
+
+  const handleNextCard = () => {
+    setCurrentCardIndex((prevIndex) => (prevIndex + 1) % flashcards.length);
+    setIsFlipped(false);
+  };
+
+  const handlePreviousCard = () => {
+    setCurrentCardIndex(
+      (prevIndex) => (prevIndex - 1 + flashcards.length) % flashcards.length
+    );
+    setIsFlipped(false);
+  };
+
+  const handleFlipCard = (index) => {
+    setIsFlipped((prev) => {
+      const newFlipped = [...prev];
+      newFlipped[index] = !newFlipped[index];
+      return newFlipped;
+    });
+  };
+
   return (
-    <div className="flex flex-col pt-10 items-center justify-center min-h-screen p-4 bg-gradient-to-b from-blue-50 to-[#2174a5]">
-      <h1 className="text-4xl font-bold mb-8 text-gray-800 m-16">Your Flashcards</h1>
+    <div className="flex flex-col pt-10 items-center justify-center min-h-screen p-4 px-8 bg-gradient-to-b from-blue-50 to-[#2174a5]">
+      <h1 className="text-4xl font-bold mb-8 text-gray-800 m-16">{deckName}</h1>
       <div className="w-full max-h-[70vh] overflow-y-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
           {flashcards.map((card, index) => (
-            <Card key={index} className="w-[250px] h-[200px] perspective-1000">
-              <div className="relative w-full h-full transition-transform duration-500 transform-style-preserve-3d hover:rotate-y-180">
-                <div className="absolute w-full h-full backface-hidden">
-                  <CardHeader>
-                    <CardTitle className="text-center text-3xl font-bold">
-                      {index + 1}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-center">{card.front}</p>
-                  </CardContent>
+            <div key={index} className="flip-card">
+              <div className="flip-card-inner">
+                <div className="flip-card-front">
+                  <Card className="h-64 flex items-center justify-center">
+                    <p className="text-xl font-semibold">{card.question}</p>
+                  </Card>
                 </div>
-                <div className="absolute w-full h-full backface-hidden rotate-y-180">
-                  <CardContent className="flex items-center justify-center h-full">
-                    <p className="text-center">{card.back}</p>
-                  </CardContent>
+                <div className="flip-card-back">
+                  <Card className="h-64 flex items-center justify-center">
+                    <p className="text-xl font-semibold">{card.answer}</p>
+                  </Card>
                 </div>
               </div>
-            </Card>
+            </div>
           ))}
         </div>
       </div>
