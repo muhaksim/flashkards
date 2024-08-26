@@ -1,6 +1,7 @@
 # Flashkards
 
-![Screenshot](./screenshot.png)
+![Screenshot](./public/screenshot.png)
+
 
 This is a Flashcards application built with [Next.js](https://nextjs.org/). It allows users to create, edit, and manage flashcards for studying.
 
