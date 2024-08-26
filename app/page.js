@@ -29,7 +29,7 @@ export default function LandingPage() {
       {/* Inserted Image */}
       <div className="mt-16 w-full max-w-6xl px-4">
         <Image
-          src="/screenshot.png"
+          src="/screenshot2.png"
           alt="Screenshot"
           className="rounded-lg shadow-lg w-full"
           layout="responsive"
