@@ -37,9 +37,6 @@ export default function Header() {
             <Link href="/pricing" legacyBehavior>
               <a className="text-gray-800 hover:text-[#139af4]">Pricing</a>
             </Link>
-            <Link href="/decks" legacyBehavior>
-              <a className="text-gray-800 hover:text-[#139af4]">Study Now</a>
-            </Link>
           </nav>
         </div>
         <div className="hidden md:flex items-center">
