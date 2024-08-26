@@ -10,10 +10,13 @@ import {
   SignedOut,
   SignedIn,
 } from "@clerk/nextjs";
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { isSignedIn } = useUser();
+  const pathname = usePathname();
+  const isFlashcardsPage = pathname?.startsWith('/flashcards');
 
   const handleLinkClick = () => {
     setMenuOpen(false);
@@ -31,12 +34,11 @@ export default function Header() {
         </div>
         <div className="hidden md:flex-1 md:flex md:justify-center">
           <nav className="space-x-6 text-lg flex items-center">
-            <Link href="/" legacyBehavior>
-              <a className="text-gray-800 hover:text-[#139af4]">Home</a>
-            </Link>
-            <Link href="/pricing" legacyBehavior>
-              <a className="text-gray-800 hover:text-[#139af4]">Pricing</a>
-            </Link>
+            {isFlashcardsPage && (
+              <Link href="/decks" legacyBehavior>
+                <a className="text-gray-800 hover:text-[#139af4]">Decks</a>
+              </Link>
+            )}
           </nav>
         </div>
         <div className="hidden md:flex items-center">

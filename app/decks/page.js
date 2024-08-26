@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -59,7 +59,7 @@ export default function Decks() {
           console.log("Deck created successfully", createdDeck);
           setNewDeckTitle("");
           setNewDeckDescription("");
-          setIsPopoverOpen(false);
+          setIsPopoverOpen(false); // Close the popover after successful creation
           await generateFlashcards(createdDeck.id, trimmedDescription);
           fetchDecks();
         } else {
@@ -116,7 +116,7 @@ export default function Decks() {
     }
   };
 
-  const fetchDecks = async () => {
+  const fetchDecks = useCallback(async () => {
     if (user && user.id) {
       try {
         const response = await fetch(
@@ -135,7 +135,7 @@ export default function Decks() {
     } else {
       console.log("User not found");
     }
-  };
+  }, [user]);
 
   const handleUpdateDeck = async (id, newTitle, newDescription) => {
     try {
@@ -203,7 +203,7 @@ export default function Decks() {
     if (user) {
       fetchDecks();
     }
-  }, [user]);
+  }, [user, fetchDecks]);
 
 
   return (
@@ -214,7 +214,7 @@ export default function Decks() {
       <div className="pb-4">
       <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
         <PopoverTrigger asChild>
-          <Button className="mb-4">Create New Deck</Button>
+          <Button className="mb-4">Create a new deck</Button>
         </PopoverTrigger>
         <PopoverContent className="w-80">
           <form onSubmit={handleCreateDeck}>
